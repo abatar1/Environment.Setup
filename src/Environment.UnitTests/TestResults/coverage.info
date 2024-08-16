@@ -1,0 +1,132 @@
+SF:C:\Users\evgen\RiderProjects\Environment.Setup\src\Environment.Setup\EnvironmentEntityConfigurationBuilder.cs
+FN:10,TEnvironmentEntity Environment.Setup.EnvironmentEntityConfigurationBuilder::AddEntity()
+FNDA:0,TEnvironmentEntity Environment.Setup.EnvironmentEntityConfigurationBuilder::AddEntity()
+DA:11,0
+DA:12,0
+DA:13,0
+DA:14,0
+BRDA:11,11,0,0
+BRDA:11,11,1,0
+FN:19,TEnvironmentEntity Environment.Setup.EnvironmentEntityConfigurationBuilder::AddEntity(System.Func`1<TEnvironmentEntity>)
+FNDA:0,TEnvironmentEntity Environment.Setup.EnvironmentEntityConfigurationBuilder::AddEntity(System.Func`1<TEnvironmentEntity>)
+DA:20,0
+DA:21,0
+DA:22,0
+FN:5,System.Void Environment.Setup.EnvironmentEntityConfigurationBuilder::.ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)
+FNDA:0,System.Void Environment.Setup.EnvironmentEntityConfigurationBuilder::.ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)
+DA:6,0
+LF:8
+LH:0
+BRF:2
+BRH:0
+FNF:3
+FNH:0
+end_of_record
+SF:C:\Users\evgen\RiderProjects\Environment.Setup\src\Environment.Setup\EnvironmentEntityProvider.cs
+FN:19,TEnvironmentEntity Environment.Setup.EnvironmentEntityProvider::Get()
+FNDA:0,TEnvironmentEntity Environment.Setup.EnvironmentEntityProvider::Get()
+DA:20,0
+FN:10,System.Void Environment.Setup.EnvironmentEntityProvider::.ctor(System.Collections.Generic.IEnumerable`1<Environment.Setup.IEnvironmentEntity>)
+FNDA:0,System.Void Environment.Setup.EnvironmentEntityProvider::.ctor(System.Collections.Generic.IEnumerable`1<Environment.Setup.IEnvironmentEntity>)
+DA:11,0
+DA:13,0
+DA:14,0
+DA:15,0
+LF:5
+LH:0
+BRF:0
+BRH:0
+FNF:2
+FNH:0
+end_of_record
+SF:C:\Users\evgen\RiderProjects\Environment.Setup\src\Environment.Setup\EnvironmentSetupException.cs
+FN:6,System.Void Environment.Setup.EnvironmentSetupException::.ctor(System.String)
+FNDA:0,System.Void Environment.Setup.EnvironmentSetupException::.ctor(System.String)
+DA:7,0
+DA:9,0
+FN:10,System.Void Environment.Setup.EnvironmentSetupException::.ctor(System.String,System.Exception)
+FNDA:0,System.Void Environment.Setup.EnvironmentSetupException::.ctor(System.String,System.Exception)
+DA:11,0
+DA:13,0
+LF:4
+LH:0
+BRF:0
+BRH:0
+FNF:2
+FNH:0
+end_of_record
+SF:C:\Users\evgen\RiderProjects\Environment.Setup\src\Environment.Setup\EnvironmentSetupExtensions.cs
+FN:14,System.Void Environment.Setup.EnvironmentSetupExtensions::SetupStringProperty(TEnvironmentEntity,System.Linq.Expressions.Expression`1<System.Func`2<TEnvironmentEntity,System.String>>,System.String)
+FNDA:0,System.Void Environment.Setup.EnvironmentSetupExtensions::SetupStringProperty(TEnvironmentEntity,System.Linq.Expressions.Expression`1<System.Func`2<TEnvironmentEntity,System.String>>,System.String)
+DA:15,0
+DA:16,0
+BRDA:15,9,0,0
+BRDA:15,9,1,0
+FN:23,System.Void Environment.Setup.EnvironmentSetupExtensions::SetupLongProperty(TEnvironmentEntity,System.Linq.Expressions.Expression`1<System.Func`2<TEnvironmentEntity,System.Int64>>,System.String)
+FNDA:0,System.Void Environment.Setup.EnvironmentSetupExtensions::SetupLongProperty(TEnvironmentEntity,System.Linq.Expressions.Expression`1<System.Func`2<TEnvironmentEntity,System.Int64>>,System.String)
+DA:24,0
+DA:25,0
+FN:32,System.Void Environment.Setup.EnvironmentSetupExtensions::SetupIntProperty(TEnvironmentEntity,System.Linq.Expressions.Expression`1<System.Func`2<TEnvironmentEntity,System.Int32>>,System.String)
+FNDA:0,System.Void Environment.Setup.EnvironmentSetupExtensions::SetupIntProperty(TEnvironmentEntity,System.Linq.Expressions.Expression`1<System.Func`2<TEnvironmentEntity,System.Int32>>,System.String)
+DA:33,0
+DA:34,0
+FN:40,System.Int32 Environment.Setup.EnvironmentSetupExtensions::GetIntVariable(TEnvironmentEntity,System.String)
+FNDA:0,System.Int32 Environment.Setup.EnvironmentSetupExtensions::GetIntVariable(TEnvironmentEntity,System.String)
+DA:41,0
+FN:47,TValue Environment.Setup.EnvironmentSetupExtensions::GetEnvironmentVariable(System.String,System.Func`2<System.String,TValue>)
+FNDA:0,TValue Environment.Setup.EnvironmentSetupExtensions::GetEnvironmentVariable(System.String,System.Func`2<System.String,TValue>)
+DA:48,0
+DA:49,0
+DA:50,0
+DA:51,0
+DA:56,0
+DA:57,0
+DA:58,0
+DA:60,0
+DA:61,0
+DA:62,0
+DA:65,0
+BRDA:48,7,0,0
+BRDA:48,7,1,0
+BRDA:49,25,0,0
+BRDA:49,25,1,0
+FN:74,System.Void Environment.Setup.EnvironmentSetupExtensions::SetupProperty(TEnvironmentEntity,System.Linq.Expressions.Expression`1<System.Func`2<TEnvironmentEntity,TValue>>,System.String,System.Func`2<System.String,TValue>)
+FNDA:0,System.Void Environment.Setup.EnvironmentSetupExtensions::SetupProperty(TEnvironmentEntity,System.Linq.Expressions.Expression`1<System.Func`2<TEnvironmentEntity,TValue>>,System.String,System.Func`2<System.String,TValue>)
+DA:75,0
+DA:77,0
+DA:78,0
+DA:79,0
+DA:80,0
+DA:81,0
+DA:85,0
+DA:86,0
+DA:87,0
+DA:89,0
+DA:90,0
+DA:91,0
+DA:93,0
+BRDA:78,20,0,0
+BRDA:78,20,1,0
+BRDA:79,44,0,0
+BRDA:79,44,1,0
+LF:31
+LH:0
+BRF:10
+BRH:0
+FNF:6
+FNH:0
+end_of_record
+SF:C:\Users\evgen\RiderProjects\Environment.Setup\src\Environment.Setup\ServiceCollectionExtensions.cs
+FN:9,Microsoft.Extensions.DependencyInjection.IServiceCollection Environment.Setup.ServiceCollectionExtensions::SetupEnvironment(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action`1<Environment.Setup.EnvironmentEntityConfigurationBuilder>)
+FNDA:0,Microsoft.Extensions.DependencyInjection.IServiceCollection Environment.Setup.ServiceCollectionExtensions::SetupEnvironment(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action`1<Environment.Setup.EnvironmentEntityConfigurationBuilder>)
+DA:10,0
+DA:11,0
+DA:12,0
+DA:13,0
+LF:4
+LH:0
+BRF:0
+BRH:0
+FNF:1
+FNH:0
+end_of_record

@@ -1,3 +1,9 @@
-\bin
-\obj
-\.idea
+bin
+obj
+.idea
+packages
+*.DotSettings.user
+*.DotSettings
+*.nupkg
+*.info
+**/Environment.UnitTests/TestResults
