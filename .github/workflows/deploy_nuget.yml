@@ -53,4 +53,4 @@ jobs:
           
       - name: Publish NuGet package
         run: |
-          dotnet nuget push ${{ env.NuGetDirectory }}/${{ inputs.project-name }}.${{ steps.nuget-next-version.outputs.next-version }}.nupkg -k "${{ secrets.NUGET_TOKEN }}" -s ${{ env.NuGetSource }} --skip-duplicate
+          dotnet nuget push ${{ env.NuGetDirectory }}/${{ inputs.nuget-name }}.${{ steps.nuget-next-version.outputs.next-version }}.nupkg -k "${{ secrets.NUGET_TOKEN }}" -s ${{ env.NuGetSource }} --skip-duplicate
