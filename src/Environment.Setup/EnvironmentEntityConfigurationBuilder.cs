@@ -5,20 +5,21 @@ namespace Environment.Setup;
 
 public sealed class EnvironmentEntityConfigurationBuilder(IServiceCollection serviceCollection)
 {
-    public TEnvironmentEntity AddEntity<TEnvironmentEntity>()
+    public EnvironmentEntityConfigurationBuilder AddEntity<TEnvironmentEntity>()
         where TEnvironmentEntity : class, IEnvironmentEntity
     {
         var environmentSetup = (TEnvironmentEntity?)Activator.CreateInstance<TEnvironmentEntity>() 
                                ?? throw new InvalidOperationException($"Could not create instance of {typeof(TEnvironmentEntity)} with empty ctor.");
         serviceCollection.AddSingleton(typeof(IEnvironmentEntity), environmentSetup);
-        return environmentSetup;
+        return this;
     }
     
-    public TEnvironmentEntity AddEntity<TEnvironmentEntity>(Func<TEnvironmentEntity> entityEnricher)
+    public EnvironmentEntityConfigurationBuilder AddEntity<TEnvironmentEntity>(Action<TEnvironmentEntity> entityEnricher)
         where TEnvironmentEntity : class, IEnvironmentEntity
     {
-        var environmentSetup = entityEnricher.Invoke();
-        serviceCollection.AddSingleton(typeof(IEnvironmentEntity), environmentSetup);
-        return environmentSetup;
+        var entity = Activator.CreateInstance<TEnvironmentEntity>();
+        entityEnricher.Invoke(entity);
+        serviceCollection.AddSingleton(typeof(IEnvironmentEntity), entity);
+        return this;
     }
 }
