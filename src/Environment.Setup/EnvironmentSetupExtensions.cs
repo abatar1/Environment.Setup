@@ -6,31 +6,31 @@ namespace Environment.Setup;
 
 public static class EnvironmentSetupExtensions
 {
-    public static void SetupStringProperty<TEnvironmentEntity>(
+    public static TEnvironmentEntity SetupStringProperty<TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, string>> setupEnricher,
         string environmentVariableName)
         where TEnvironmentEntity : IEnvironmentEntity
     {
-        setup.SetupProperty(setupEnricher, environmentVariableName, x => x);
+        return setup.SetupProperty(setupEnricher, environmentVariableName, x => x);
     }
 
-    public static void SetupLongProperty<TEnvironmentEntity>(
+    public static TEnvironmentEntity SetupLongProperty<TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, long>> setupEnricher,
         string environmentVariableName)
         where TEnvironmentEntity : IEnvironmentEntity
     {
-        setup.SetupProperty(setupEnricher, environmentVariableName, long.Parse);
+        return setup.SetupProperty(setupEnricher, environmentVariableName, long.Parse);
     }
     
-    public static void SetupIntProperty<TEnvironmentEntity>(
+    public static TEnvironmentEntity SetupIntProperty<TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, int>> setupEnricher,
         string environmentVariableName)
         where TEnvironmentEntity : IEnvironmentEntity
     {
-        setup.SetupProperty(setupEnricher, environmentVariableName, int.Parse);
+        return setup.SetupProperty(setupEnricher, environmentVariableName, int.Parse);
     }
     
     public static int GetIntVariable<TEnvironmentEntity>(
@@ -41,7 +41,7 @@ public static class EnvironmentSetupExtensions
         return GetEnvironmentVariable(environmentVariableName, int.Parse);
     }
 
-    public static void SetupProperty<TValue, TEnvironmentEntity>(
+    public static TEnvironmentEntity SetupProperty<TValue, TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, TValue>> setupEnricher,
         string environmentVariableName,
@@ -66,6 +66,8 @@ public static class EnvironmentSetupExtensions
                 $"Failed to set property {property.Name} with value {convertedValue} for variable {environmentVariableName}",
                 e);
         }
+
+        return setup;
     }
     
     private static TValue GetEnvironmentVariable<TValue>(
