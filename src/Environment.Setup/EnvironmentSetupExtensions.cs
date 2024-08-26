@@ -41,31 +41,7 @@ public static class EnvironmentSetupExtensions
         return GetEnvironmentVariable(environmentVariableName, int.Parse);
     }
 
-    private static TValue GetEnvironmentVariable<TValue>(
-        string environmentVariableName,
-        Func<string, TValue> converter)
-    {
-        var environmentVariable = System.Environment.GetEnvironmentVariable(environmentVariableName)?.Trim();
-        if (string.IsNullOrWhiteSpace(environmentVariable))
-            throw new EnvironmentSetupException(
-                $"Failed to load {environmentVariableName} environment variable, ensure it has been set up");
-
-        TValue convertedValue;
-        try
-        {
-            convertedValue = converter.Invoke(environmentVariable.Trim());
-        }
-        catch (Exception e)
-        {
-            throw new EnvironmentSetupException(
-                $"Failed to convert value {environmentVariable} for {environmentVariableName} environment variable, ensure it has been set up correctly",
-                e);
-        }
-
-        return convertedValue;
-    }
-
-    private static void SetupProperty<TValue, TEnvironmentEntity>(
+    public static void SetupProperty<TValue, TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, TValue>> setupEnricher,
         string environmentVariableName,
@@ -90,5 +66,29 @@ public static class EnvironmentSetupExtensions
                 $"Failed to set property {property.Name} with value {convertedValue} for variable {environmentVariableName}",
                 e);
         }
+    }
+    
+    private static TValue GetEnvironmentVariable<TValue>(
+        string environmentVariableName,
+        Func<string, TValue> converter)
+    {
+        var environmentVariable = System.Environment.GetEnvironmentVariable(environmentVariableName)?.Trim();
+        if (string.IsNullOrWhiteSpace(environmentVariable))
+            throw new EnvironmentSetupException(
+                $"Failed to load {environmentVariableName} environment variable, ensure it has been set up");
+
+        TValue convertedValue;
+        try
+        {
+            convertedValue = converter.Invoke(environmentVariable.Trim());
+        }
+        catch (Exception e)
+        {
+            throw new EnvironmentSetupException(
+                $"Failed to convert value {environmentVariable} for {environmentVariableName} environment variable, ensure it has been set up correctly",
+                e);
+        }
+
+        return convertedValue;
     }
 }
