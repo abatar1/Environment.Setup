@@ -4,57 +4,69 @@ using System.Reflection;
 
 namespace Environment.Setup;
 
+/// <summary>
+/// Extensions class to set up environment entity in builder.
+/// </summary>
 public static class EnvironmentSetupExtensions
 {
     public static TEnvironmentEntity SetupStringProperty<TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, string>> setupEnricher,
-        string environmentVariableName)
+        string environmentVariableName,
+        bool isRequired = true)
         where TEnvironmentEntity : IEnvironmentEntity
     {
-        return setup.SetupProperty(setupEnricher, environmentVariableName, x => x);
+        return setup.SetupProperty(setupEnricher, environmentVariableName, x => x, isRequired);
     }
-
+    
     public static TEnvironmentEntity SetupLongProperty<TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, long>> setupEnricher,
-        string environmentVariableName)
+        string environmentVariableName,
+        bool isRequired = true)
         where TEnvironmentEntity : IEnvironmentEntity
     {
-        return setup.SetupProperty(setupEnricher, environmentVariableName, long.Parse);
+        return setup.SetupProperty(setupEnricher, environmentVariableName, long.Parse, isRequired);
     }
     
     public static TEnvironmentEntity SetupIntProperty<TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, int>> setupEnricher,
-        string environmentVariableName)
+        string environmentVariableName,
+        bool isRequired = true)
         where TEnvironmentEntity : IEnvironmentEntity
     {
-        return setup.SetupProperty(setupEnricher, environmentVariableName, int.Parse);
-    }
-    
-    public static int GetIntVariable<TEnvironmentEntity>(
-        this TEnvironmentEntity _,
-        string environmentVariableName)
-        where TEnvironmentEntity : IEnvironmentEntity
-    {
-        return GetEnvironmentVariable(environmentVariableName, int.Parse);
+        return setup.SetupProperty(setupEnricher, environmentVariableName, int.Parse, isRequired);
     }
 
+    /// <summary>
+    /// Used if environment variable contains custom class which requires conversion. 
+    /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public static TEnvironmentEntity SetupProperty<TValue, TEnvironmentEntity>(
         this TEnvironmentEntity setup,
         Expression<Func<TEnvironmentEntity, TValue>> setupEnricher,
         string environmentVariableName,
-        Func<string, TValue> converter)
+        Func<string, TValue> converter,
+        bool isRequired = true)
         where TEnvironmentEntity : IEnvironmentEntity
     {
-        var convertedValue = GetEnvironmentVariable(environmentVariableName, converter);
+        TValue convertedValue;
+        try
+        {
+            convertedValue = GetEnvironmentVariable(environmentVariableName, converter);
+        }
+        catch (EnvironmentVariableNullException)
+        {
+            if (isRequired)
+                throw;
+            return setup;
+        }
 
         var memberExpression = setupEnricher.Body as MemberExpression;
         var property = memberExpression?.Member as PropertyInfo;
         if (property == null)
-            throw new EnvironmentSetupException(
-                $"Could not get the property of environment setup for environment variable {environmentVariableName}, ensure property selected correctly");
+            throw new EnvironmentSetupException($"Could not get the property of environment setup for environment variable {environmentVariableName}, ensure property selected correctly");
 
         try
         {
@@ -76,8 +88,7 @@ public static class EnvironmentSetupExtensions
     {
         var environmentVariable = System.Environment.GetEnvironmentVariable(environmentVariableName)?.Trim();
         if (string.IsNullOrWhiteSpace(environmentVariable))
-            throw new EnvironmentSetupException(
-                $"Failed to load {environmentVariableName} environment variable, ensure it has been set up");
+            throw new EnvironmentVariableNullException($"Failed to load {environmentVariableName} environment variable, ensure it has been set up");
 
         TValue convertedValue;
         try
