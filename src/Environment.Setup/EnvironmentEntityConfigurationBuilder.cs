@@ -3,14 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Environment.Setup;
 
-public sealed class EnvironmentEntityConfigurationBuilder(IServiceCollection serviceCollection)
+public sealed class EnvironmentEntityConfigurationBuilder(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
 {
-    public EnvironmentEntityConfigurationBuilder AddEntity<TEnvironmentEntity>()
+    public EnvironmentEntityConfigurationBuilder AddEntity<TEnvironmentEntity>(Action<IServiceProvider, TEnvironmentEntity> entityEnricher)
         where TEnvironmentEntity : class, IEnvironmentEntity
     {
-        var environmentSetup = (TEnvironmentEntity?)Activator.CreateInstance<TEnvironmentEntity>() 
-                               ?? throw new InvalidOperationException($"Could not create instance of {typeof(TEnvironmentEntity)} with empty ctor.");
-        serviceCollection.AddSingleton(typeof(IEnvironmentEntity), environmentSetup);
+        var entity = Activator.CreateInstance<TEnvironmentEntity>();
+        entityEnricher.Invoke(serviceProvider, entity);
+        serviceCollection.AddSingleton(typeof(IEnvironmentEntity), entity);
         return this;
     }
     
