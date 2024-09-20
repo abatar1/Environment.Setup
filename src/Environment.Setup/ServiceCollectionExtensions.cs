@@ -13,7 +13,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddSingleton<IEnvironmentEntityProvider, EnvironmentEntityProvider>(sp =>
         {
             var builder = new EnvironmentEntityConfigurationBuilder(sp);
-            builderEnricher.Invoke(builder);
             builder = builderEnricher.Invoke(builder);
             return new EnvironmentEntityProvider(builder.Entities);
         });
