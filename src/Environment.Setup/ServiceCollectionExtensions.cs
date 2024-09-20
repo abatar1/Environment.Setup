@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Environment.Setup;
@@ -9,17 +8,14 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Setups environments, builder used to set up each variable separately. Use IEnvironmentEntityProvider to get variables.
     /// </summary>
-    public static IServiceCollection SetupEnvironment(this IServiceCollection serviceCollection, Action<EnvironmentEntityConfigurationBuilder> builderEnricher)
+    public static IServiceCollection SetupEnvironment(this IServiceCollection serviceCollection, Func<EnvironmentEntityConfigurationBuilder, EnvironmentEntityConfigurationBuilder> builderEnricher)
     {
         serviceCollection.AddSingleton<IEnvironmentEntityProvider, EnvironmentEntityProvider>(sp =>
         {
-            var builder = new EnvironmentEntityConfigurationBuilder(serviceCollection, sp);
+            var builder = new EnvironmentEntityConfigurationBuilder(sp);
             builderEnricher.Invoke(builder);
-
-            using var updatedSp = serviceCollection.BuildServiceProvider();
-            
-            var entities = updatedSp.GetRequiredService<IEnumerable<IEnvironmentEntity>>();
-            return new EnvironmentEntityProvider(entities);
+            builder = builderEnricher.Invoke(builder);
+            return new EnvironmentEntityProvider(builder.Entities);
         });
         
         return serviceCollection;
@@ -29,17 +25,13 @@ public static class ServiceCollectionExtensions
     /// Setups environments, builder used to set up each variable separately. Use IEnvironmentEntityProvider to get variables.
     /// Allows to use service provider during set up.
     /// </summary>
-    public static IServiceCollection SetupEnvironment(this IServiceCollection serviceCollection, Action<IServiceProvider, EnvironmentEntityConfigurationBuilder> builderEnricher)
+    public static IServiceCollection SetupEnvironment(this IServiceCollection serviceCollection, Func<IServiceProvider, EnvironmentEntityConfigurationBuilder, EnvironmentEntityConfigurationBuilder> builderEnricher)
     {
         serviceCollection.AddSingleton<IEnvironmentEntityProvider, EnvironmentEntityProvider>(sp =>
         {
-            var builder = new EnvironmentEntityConfigurationBuilder(serviceCollection, sp);
-            builderEnricher.Invoke(sp, builder);
-            
-            using var updatedSp = serviceCollection.BuildServiceProvider();
-            
-            var entities = updatedSp.GetRequiredService<IEnumerable<IEnvironmentEntity>>();
-            return new EnvironmentEntityProvider(entities);
+            var builder = new EnvironmentEntityConfigurationBuilder(sp);
+            builder = builderEnricher.Invoke(sp, builder);
+            return new EnvironmentEntityProvider(builder.Entities);
         });
         
         return serviceCollection;

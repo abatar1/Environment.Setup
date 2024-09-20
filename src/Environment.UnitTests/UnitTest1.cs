@@ -6,9 +6,9 @@ public sealed class UnitTest1
     public void Test()
     {
         // Assign
-        
+    
         // Act
-        
+
         // Assert
     }
 }

@@ -1,21 +1,15 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace Environment.Setup;
 
 // TODO Notify TEnvironmentEntity with updates when Set is called?
-internal sealed class EnvironmentEntityProvider : IEnvironmentEntityProvider
+internal sealed class EnvironmentEntityProvider(IDictionary<Type, IEnvironmentEntity> environmentEntities)
+    : IEnvironmentEntityProvider
 {
-    private readonly ConcurrentDictionary<Type, IEnvironmentEntity> _environmentEntityMap;
-
-    public EnvironmentEntityProvider(IEnumerable<IEnvironmentEntity> environmentEntities)
-    {
-        _environmentEntityMap = new ConcurrentDictionary<Type, IEnvironmentEntity>(environmentEntities
-            .ToDictionary(entity => entity.GetType(), entity => entity));
-    }
+    private readonly ConcurrentDictionary<Type, IEnvironmentEntity> _environmentEntityMap = new(environmentEntities);
 
     public TEnvironmentEntity Get<TEnvironmentEntity>()
         where TEnvironmentEntity : class, IEnvironmentEntity
