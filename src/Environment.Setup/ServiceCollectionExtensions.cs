@@ -11,15 +11,14 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection SetupEnvironment(this IServiceCollection serviceCollection, Action<EnvironmentEntityConfigurationBuilder> builderEnricher)
     {
-        using (var serviceProvider = serviceCollection.BuildServiceProvider())
-        {
-            var builder = new EnvironmentEntityConfigurationBuilder(serviceCollection, serviceProvider);
-            builderEnricher.Invoke(builder);
-        }
-        
         serviceCollection.AddSingleton<IEnvironmentEntityProvider, EnvironmentEntityProvider>(sp =>
         {
-            var entities = sp.GetRequiredService<IEnumerable<IEnvironmentEntity>>();
+            var builder = new EnvironmentEntityConfigurationBuilder(serviceCollection, sp);
+            builderEnricher.Invoke(builder);
+
+            using var updatedSp = serviceCollection.BuildServiceProvider();
+            
+            var entities = updatedSp.GetRequiredService<IEnumerable<IEnvironmentEntity>>();
             return new EnvironmentEntityProvider(entities);
         });
         
@@ -32,15 +31,14 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection SetupEnvironment(this IServiceCollection serviceCollection, Action<IServiceProvider, EnvironmentEntityConfigurationBuilder> builderEnricher)
     {
-        using (var serviceProvider = serviceCollection.BuildServiceProvider())
-        {
-            var builder = new EnvironmentEntityConfigurationBuilder(serviceCollection, serviceProvider);
-            builderEnricher.Invoke(serviceProvider, builder);
-        }
-        
         serviceCollection.AddSingleton<IEnvironmentEntityProvider, EnvironmentEntityProvider>(sp =>
         {
-            var entities = sp.GetRequiredService<IEnumerable<IEnvironmentEntity>>();
+            var builder = new EnvironmentEntityConfigurationBuilder(serviceCollection, sp);
+            builderEnricher.Invoke(sp, builder);
+            
+            using var updatedSp = serviceCollection.BuildServiceProvider();
+            
+            var entities = updatedSp.GetRequiredService<IEnumerable<IEnvironmentEntity>>();
             return new EnvironmentEntityProvider(entities);
         });
         
