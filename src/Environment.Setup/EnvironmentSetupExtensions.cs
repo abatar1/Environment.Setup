@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Environment.Setup;
 
@@ -14,7 +13,7 @@ public static class EnvironmentSetupExtensions
         Expression<Func<TEnvironmentEntity, string>> setupEnricher,
         string environmentVariableName,
         bool isRequired = true)
-        where TEnvironmentEntity : IEnvironmentEntity
+        where TEnvironmentEntity : class, IEnvironmentEntity
     {
         return setup.SetupProperty(setupEnricher, environmentVariableName, x => x, isRequired);
     }
@@ -24,7 +23,7 @@ public static class EnvironmentSetupExtensions
         Expression<Func<TEnvironmentEntity, long>> setupEnricher,
         string environmentVariableName,
         bool isRequired = true)
-        where TEnvironmentEntity : IEnvironmentEntity
+        where TEnvironmentEntity : class, IEnvironmentEntity
     {
         return setup.SetupProperty(setupEnricher, environmentVariableName, long.Parse, isRequired);
     }
@@ -34,7 +33,7 @@ public static class EnvironmentSetupExtensions
         Expression<Func<TEnvironmentEntity, int>> setupEnricher,
         string environmentVariableName,
         bool isRequired = true)
-        where TEnvironmentEntity : IEnvironmentEntity
+        where TEnvironmentEntity : class, IEnvironmentEntity
     {
         return setup.SetupProperty(setupEnricher, environmentVariableName, int.Parse, isRequired);
     }
@@ -49,7 +48,7 @@ public static class EnvironmentSetupExtensions
         string environmentVariableName,
         Func<string, TValue> converter,
         bool isRequired = true)
-        where TEnvironmentEntity : IEnvironmentEntity
+        where TEnvironmentEntity : class, IEnvironmentEntity
     {
         TValue convertedValue;
         try
@@ -63,23 +62,7 @@ public static class EnvironmentSetupExtensions
             return setup;
         }
 
-        var memberExpression = setupEnricher.Body as MemberExpression;
-        var property = memberExpression?.Member as PropertyInfo;
-        if (property == null)
-            throw new EnvironmentSetupException($"Could not get the property of environment setup for environment variable {environmentVariableName}, ensure property selected correctly");
-
-        try
-        {
-            property.SetValue(setup, convertedValue);
-        }
-        catch (Exception e)
-        {
-            throw new EnvironmentSetupException(
-                $"Failed to set property {property.Name} with value {convertedValue} for variable {environmentVariableName}",
-                e);
-        }
-
-        return setup;
+        return setup.SetupProperty(setupEnricher, convertedValue, environmentVariableName);
     }
     
     private static TValue GetEnvironmentVariable<TValue>(
@@ -93,7 +76,9 @@ public static class EnvironmentSetupExtensions
         TValue convertedValue;
         try
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             convertedValue = converter.Invoke(environmentVariable.Trim());
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
         catch (Exception e)
         {
