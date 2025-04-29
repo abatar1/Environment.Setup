@@ -12,6 +12,22 @@ public sealed class EnvironmentConfigurationBuilder<TEnvironmentConfiguration>(I
     private readonly List<Func<TEnvironmentConfiguration, TEnvironmentConfiguration>> _enrichers = new();
     private readonly IEnvironmentVariableProvider _provider = serviceProvider.GetRequiredService<IEnvironmentVariableProvider>();
 
+    /// <summary>
+    /// Configures the environment builder by mapping an environment variable to a string property in the configuration.
+    /// </summary>
+    /// <param name="setupEnricher">
+    /// An expression specifying the property in the environment configuration to set.
+    /// </param>
+    /// <param name="environmentVariableName">
+    /// The name of the environment variable to retrieve the value from.
+    /// </param>
+    /// <param name="isRequired">
+    /// Indicates whether the environment variable is mandatory. Defaults to true.
+    /// </param>
+    /// <returns>
+    /// The instance of <see cref="EnvironmentConfigurationBuilder{TEnvironmentConfiguration}"/>
+    /// with the environment variable mapping applied.
+    /// </returns>
     public EnvironmentConfigurationBuilder<TEnvironmentConfiguration> WithStringVariable(
         Expression<Func<TEnvironmentConfiguration, string>> setupEnricher,
         string environmentVariableName,
@@ -20,7 +36,23 @@ public sealed class EnvironmentConfigurationBuilder<TEnvironmentConfiguration>(I
         WithVariable(setupEnricher, environmentVariableName, x => x, isRequired);
         return this;
     }
-    
+
+    /// <summary>
+    /// Configures the environment builder by mapping an environment variable to a long property in the configuration.
+    /// </summary>
+    /// <param name="setupEnricher">
+    /// An expression specifying the property in the environment configuration to set.
+    /// </param>
+    /// <param name="environmentVariableName">
+    /// The name of the environment variable to retrieve the value from.
+    /// </param>
+    /// <param name="isRequired">
+    /// Indicates whether the environment variable is mandatory. Defaults to true.
+    /// </param>
+    /// <returns>
+    /// The instance of <see cref="EnvironmentConfigurationBuilder{TEnvironmentConfiguration}"/>
+    /// with the environment variable mapping applied.
+    /// </returns>
     public EnvironmentConfigurationBuilder<TEnvironmentConfiguration> WithLongVariable(
         Expression<Func<TEnvironmentConfiguration, long>> setupEnricher,
         string environmentVariableName,
@@ -29,7 +61,23 @@ public sealed class EnvironmentConfigurationBuilder<TEnvironmentConfiguration>(I
         WithVariable(setupEnricher, environmentVariableName, long.Parse, isRequired);
         return this;
     }
-    
+
+    /// <summary>
+    /// Configures the environment builder by mapping an environment variable to an integer property in the configuration.
+    /// </summary>
+    /// <param name="setupEnricher">
+    /// An expression specifying the property in the environment configuration to set.
+    /// </param>
+    /// <param name="environmentVariableName">
+    /// The name of the environment variable to retrieve the value from.
+    /// </param>
+    /// <param name="isRequired">
+    /// Indicates whether the environment variable is mandatory. Defaults to true.
+    /// </param>
+    /// <returns>
+    /// The instance of <see cref="EnvironmentConfigurationBuilder{TEnvironmentConfiguration}"/>
+    /// with the environment variable mapping applied.
+    /// </returns>
     public EnvironmentConfigurationBuilder<TEnvironmentConfiguration> WithIntVariable(
         Expression<Func<TEnvironmentConfiguration, int>> setupEnricher,
         string environmentVariableName,
@@ -40,9 +88,14 @@ public sealed class EnvironmentConfigurationBuilder<TEnvironmentConfiguration>(I
     }
 
     /// <summary>
-    /// Used if environment variable contains custom class which requires conversion. 
+    /// 
     /// </summary>
-    // ReSharper disable once MemberCanBePrivate.Global
+    /// <param name="setupEnricher"></param>
+    /// <param name="environmentVariableName"></param>
+    /// <param name="converter"></param>
+    /// <param name="isRequired"></param>
+    /// <typeparam name="TValue"></typeparam>
+    /// <returns></returns>
     public EnvironmentConfigurationBuilder<TEnvironmentConfiguration> WithVariable<TValue>(
         Expression<Func<TEnvironmentConfiguration, TValue>> setupEnricher,
         string environmentVariableName,
