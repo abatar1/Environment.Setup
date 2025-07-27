@@ -11,10 +11,7 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection SetupEnvironmentObserver(this IServiceCollection services, Func<EnvironmentConfigurationBuilder, EnvironmentConfigurationBuilder> builderEnricher)
     {
-        services.AddSingleton<IEnvironmentVariableProvider, EnvironmentVariableProvider>();
-        var sp = services.BuildServiceProvider();
-        
-        var builder = new EnvironmentConfigurationBuilder(sp,new Dictionary<Type, EnvironmentConfigurationState>());
+        var builder = new EnvironmentConfigurationBuilder(new Dictionary<Type, EnvironmentConfigurationState>());
         var concreteBuilder = builderEnricher.Invoke(builder);
 
         return RegisterConfigurationsFromStates(services, concreteBuilder.States);
@@ -22,32 +19,7 @@ public static class ServiceCollectionExtensions
     
     public static IServiceCollection SetupEnvironmentObserver(this IServiceCollection services, Func<EnvironmentConfigurationBuilder, EnvironmentConfigurationConcreteBuilder> builderEnricher)
     {
-        services.AddSingleton<IEnvironmentVariableProvider, EnvironmentVariableProvider>();
-        var sp = services.BuildServiceProvider();
-        
-        var builder = new EnvironmentConfigurationBuilder(sp,new Dictionary<Type, EnvironmentConfigurationState>());
-        var concreteBuilder = builderEnricher.Invoke(builder);
-        
-        return RegisterConfigurationsFromStates(services, concreteBuilder.States);
-    }
-    
-    internal static IServiceCollection SetupEnvironmentObserver(this IServiceCollection services, IEnvironmentVariableProvider environmentVariableProvider, Func<EnvironmentConfigurationBuilder, EnvironmentConfigurationBuilder> builderEnricher)
-    {
-        services.AddSingleton(environmentVariableProvider);
-        var sp = services.BuildServiceProvider();
-        
-        var builder = new EnvironmentConfigurationBuilder(sp,new Dictionary<Type, EnvironmentConfigurationState>());
-        var concreteBuilder = builderEnricher.Invoke(builder);
-
-        return RegisterConfigurationsFromStates(services, concreteBuilder.States);
-    }
-    
-    internal static IServiceCollection SetupEnvironmentObserver(this IServiceCollection services, IEnvironmentVariableProvider environmentVariableProvider, Func<EnvironmentConfigurationBuilder, EnvironmentConfigurationConcreteBuilder> builderEnricher)
-    {
-        services.AddSingleton(environmentVariableProvider);
-        var sp = services.BuildServiceProvider();
-        
-        var builder = new EnvironmentConfigurationBuilder(sp, new Dictionary<Type, EnvironmentConfigurationState>());
+        var builder = new EnvironmentConfigurationBuilder(new Dictionary<Type, EnvironmentConfigurationState>());
         var concreteBuilder = builderEnricher.Invoke(builder);
         
         return RegisterConfigurationsFromStates(services, concreteBuilder.States);

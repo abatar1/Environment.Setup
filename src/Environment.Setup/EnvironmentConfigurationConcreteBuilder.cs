@@ -31,6 +31,6 @@ public sealed class EnvironmentConfigurationConcreteBuilder(Type type, Environme
     {
         var states = _configurationBuilder.States;
         states[type] = states[type] with { IsObservable = true };
-        return new EnvironmentConfigurationBuilder(_configurationBuilder.ServiceProvider, states);
+        return new EnvironmentConfigurationBuilder(states);
     }
 }

@@ -10,7 +10,6 @@ public sealed class Tests
     public void Configure_NotObservable_ValueShouldNotChange()
     {
         // Assign
-        var envKey = "key";
         var envValue1 = "value1";
         var envValue2 = "value2";
         
@@ -19,15 +18,15 @@ public sealed class Tests
         stack.Push(envValue1);
         
         var services = new ServiceCollection();
-        var providerMock = new Mock<IEnvironmentVariableProvider>();
-        providerMock
-            .Setup(x => x.GetEnvironmentVariable(It.Is<string>(y => y == envKey), It.IsAny<Func<string, string>>()))
+        var environmentReaderMock = new Mock<IEnvironmentReader>();
+        environmentReaderMock
+            .Setup(x => x.GetValue())
             .Returns(() => stack.Pop());
         
         // Act
-        services.SetupEnvironmentObserver(providerMock.Object, x => 
+        services.SetupEnvironmentObserver(x => 
             x.Configure<TestConfiguration>(c => 
-                c.WithStringVariable(p => p.TestStringProperty, envKey)));
+                c.WithStringVariable(p => p.TestStringProperty, environmentReaderMock.Object)));
         
         // Assert
         using (var scope = services.BuildServiceProvider().CreateAsyncScope())
@@ -47,7 +46,6 @@ public sealed class Tests
     public void Configure_Observable_ValueShouldNotChange()
     {
         // Assign
-        var envKey = "key";
         var envValue1 = "value1";
         var envValue2 = "value2";
         
@@ -56,14 +54,14 @@ public sealed class Tests
         stack.Push(envValue1);
         
         var services = new ServiceCollection();
-        var providerMock = new Mock<IEnvironmentVariableProvider>();
-        providerMock
-            .Setup(x => x.GetEnvironmentVariable(It.Is<string>(y => y == envKey), It.IsAny<Func<string, string>>()))
+        var environmentReaderMock = new Mock<IEnvironmentReader>();
+        environmentReaderMock
+            .Setup(x => x.GetValue())
             .Returns(() => stack.Pop());
         
         // Act
-        services.SetupEnvironmentObserver(providerMock.Object,x => 
-            x.Configure<TestConfiguration>(c => c.WithStringVariable(p => p.TestStringProperty, envKey)).AsObservable());
+        services.SetupEnvironmentObserver(x => 
+            x.Configure<TestConfiguration>(c => c.WithStringVariable(p => p.TestStringProperty, environmentReaderMock.Object)).AsObservable());
         
         // Assert
         using (var scope = services.BuildServiceProvider().CreateAsyncScope())
