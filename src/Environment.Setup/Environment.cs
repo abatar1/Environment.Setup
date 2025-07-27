@@ -3,7 +3,7 @@
 /// <summary>
 /// Provides utility methods for accessing environment settings from different sources such as files or environment variables.
 /// </summary>
-public static class Environment
+public static class Read
 {
     /// <summary>
     /// Reads environment settings from a specified file and returns an environment reader instance.
