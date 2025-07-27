@@ -5,6 +5,14 @@ using System.Reflection;
 
 namespace Environment.Setup;
 
+/// <summary>
+/// Provides functionality to configure environment variables for an environment configuration class.
+/// This builder allows specifying the required configuration details and variable conversions to setup
+/// an environment configuration.
+/// </summary>
+/// <typeparam name="TEnvironmentConfiguration">
+/// The type of the environment configuration class that implements <see cref="IEnvironmentConfiguration"/>.
+/// </typeparam>
 public sealed class EnvironmentConfigurationBuilder<TEnvironmentConfiguration>(TEnvironmentConfiguration configuration)
     where TEnvironmentConfiguration : class, IEnvironmentConfiguration
 {

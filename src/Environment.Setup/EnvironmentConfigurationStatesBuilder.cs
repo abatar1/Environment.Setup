@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 namespace Environment.Setup;
 
-public sealed class EnvironmentConfigurationBuilder(Dictionary<Type, EnvironmentConfigurationState> states)
+/// <summary>
+/// Facilitates the construction and management of environment configuration states. This builder provides functionality
+/// to configure, manage, and register environment configuration types with their respective enrichers and observability settings.
+/// </summary>
+public sealed class EnvironmentConfigurationStatesBuilder(Dictionary<Type, EnvironmentConfigurationState> states)
 {
     internal Dictionary<Type, EnvironmentConfigurationState> States { get; } = states;
 
