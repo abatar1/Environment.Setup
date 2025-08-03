@@ -2,7 +2,7 @@
 
 namespace Environment.Setup;
 
-internal sealed class EnvironmentFileReader(string name) : IEnvironmentReader
+internal sealed class EnvironmentFileReader(string name, string path) : IEnvironmentReader
 {
     /// <summary>
     /// Retrieves the value of an environment configuration from the specified source.
@@ -11,9 +11,10 @@ internal sealed class EnvironmentFileReader(string name) : IEnvironmentReader
     /// <exception cref="EnvironmentVariableNullException">Thrown when the environment configuration value is null, empty, or whitespace.</exception>
     public string GetValue()
     {
-        var environmentVariable = File.ReadAllText(name).Trim();
+        var filePath = Path.Combine(path, name);
+        var environmentVariable = File.ReadAllText(filePath).Trim();
         if (string.IsNullOrWhiteSpace(environmentVariable))
-            throw new EnvironmentVariableNullException($"Failed to load {name} file, ensure it exists");
+            throw new EnvironmentVariableNullException($"Failed to load {name} file on path {path}, ensure it exists");
         return environmentVariable;
     }
 }

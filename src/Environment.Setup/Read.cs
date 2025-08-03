@@ -8,11 +8,12 @@ public static class Read
     /// <summary>
     /// Reads environment settings from a specified file and returns an environment reader instance.
     /// </summary>
-    /// <param name="filePath">The path to the file containing environment configuration values.</param>
+    /// <param name="name">The name of the environment configuration file to be read.</param>
+    /// <param name="filePath">The directory path where the configuration file is located.</param>
     /// <returns>An instance of <see cref="IEnvironmentReader"/> to read the environment configuration from the specified file.</returns>
-    public static IEnvironmentReader FromFile(string filePath)
+    public static IEnvironmentReader FromFile(string name, string filePath)
     {
-        return new EnvironmentFileReader(filePath);
+        return new EnvironmentFileReader(name, filePath);
     }
 
     /// <summary>
